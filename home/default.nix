@@ -4,6 +4,7 @@
     ./packages.nix
     ./shell.nix
     ./sway.nix
+    ./librewolf.nix
   ];
 
   home.username = username;

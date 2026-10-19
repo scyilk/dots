@@ -18,6 +18,10 @@
         "*" = {
           xkb_layout = "us";
         };
+        "Glorious Model O" = {
+          accel_profile = "flat"; # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
+          pointer_accel = "0.75";
+        };
       };
 
       output = {
@@ -87,6 +91,7 @@
   };
 
   services.mako.enable = true;
+  services.udiskie.enable = true;
 
   systemd.user.services.mako = {
     Unit = {
