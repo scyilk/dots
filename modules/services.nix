@@ -17,6 +17,7 @@
   services.fwupd.enable = true;
   services.thermald.enable = true;
   services.fstrim.enable = true;
+  zramSwap.enable = true;
 
   services.pipewire = {
     enable = true;
