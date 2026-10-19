@@ -32,8 +32,6 @@
     electron-fiddle
 
     zulu25
-    zulu21
-    zulu8
     android-tools
     arduino-ide
 
@@ -66,4 +64,10 @@
     kdePackages.kdeconnect-kde
     snapshot
   ];
+
+  home.file = {
+    ".local/share/jdks/zulu8".source = pkgs.zulu8;
+    ".local/share/jdks/zulu21".source = pkgs.zulu21;
+    ".local/share/jdks/zulu25".source = pkgs.zulu25;
+  };
 }
