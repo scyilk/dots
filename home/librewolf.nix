@@ -147,6 +147,7 @@ in
         metamask
       ];
 
+      bookmarks.force = true;
       bookmarks.settings = [
         {
           name = "Syncthing";
