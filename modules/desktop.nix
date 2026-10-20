@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   programs.sway = {
     enable = true;
@@ -7,11 +7,10 @@
 
   services.greetd = {
     enable = true;
-    useTextGreeter = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd sway";
-      };
+    restart = true;
+    settings.initial_session = {
+      command = "${pkgs.sway}/bin/sway";
+      user = username;
     };
   };
 
