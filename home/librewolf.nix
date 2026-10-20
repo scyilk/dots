@@ -147,6 +147,16 @@ in
         metamask
       ];
 
+      containersForce = true;
+      containers = {
+        tor = {
+          id = 1;
+          name = "Tor";
+          color = "purple";
+          icon = "fingerprint";
+        };
+      };
+
       bookmarks.force = true;
       bookmarks.settings = [
         {

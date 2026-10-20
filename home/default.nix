@@ -5,6 +5,7 @@
     ./shell.nix
     ./sway.nix
     ./librewolf.nix
+    ./tor.nix
     ./nvim.nix
     ./alacritty.nix
   ];
