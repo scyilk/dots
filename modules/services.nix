@@ -12,6 +12,7 @@
   services.syncthing = {
     enable = true;
     user = username;
+    dataDir = "/home/${username}/.local/share/syncthing";
   };
 
   services.fwupd.enable = true;

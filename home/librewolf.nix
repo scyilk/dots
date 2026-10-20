@@ -109,7 +109,7 @@ in
 
         engines = {
           ddg.metaData.hidden = true;
-          mojeek.metaData.hasBeenUsed = true;
+          mojeek.metaData.hidden = true;
           startpage.metaData.hidden = true;
           wikipedia.metaData.hidden = true;
 
@@ -121,7 +121,6 @@ in
               }
             ];
             definedAliases = [ ];
-            metaData.alias = "";
           };
 
           ${nixos-search-id} = {
@@ -136,7 +135,7 @@ in
               }
             ];
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ ];
+            definedAliases = [ "@nix" ];
           };
         };
       };
@@ -146,6 +145,13 @@ in
         sidebery
         ublock-origin
         metamask
+      ];
+
+      bookmarks.settings = [
+        {
+          name = "Syncthing";
+          url = "http://localhost:8384/";
+        }
       ];
     };
   };

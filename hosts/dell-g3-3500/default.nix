@@ -16,4 +16,10 @@
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_GB.UTF-8";
   console.keyMap = "us";
+
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/55e5eb6a-dfa4-4145-98fd-e5b801553fc0";
+    fsType = "ext4";
+    options = [ "defaults" "noatime" ];
+  };
 }
