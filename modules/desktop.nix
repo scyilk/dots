@@ -8,7 +8,7 @@
   services.greetd = {
     enable = true;
     restart = true;
-    settings.initial_session = {
+    settings.default_session = {
       command = "${pkgs.sway}/bin/sway";
       user = username;
     };

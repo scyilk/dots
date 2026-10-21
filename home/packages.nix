@@ -52,6 +52,8 @@
     jq
     yq
     sway
+    udiskie
+    adwaita-icon-theme
 
     prismlauncher
     mangohud
