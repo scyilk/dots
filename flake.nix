@@ -11,9 +11,12 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    bedrock-on-linux = {
+      url = "github:Wyze3306/BedrockOnLinux";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, ... }:
+  outputs = { nixpkgs, home-manager, bedrock-on-linux, ... }:
     let
       system = "x86_64-linux";
       username = "scyilk";
@@ -29,7 +32,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit system username hostname; };
+            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux; };
             home-manager.users.${username} = import ./home;
           }
         ];

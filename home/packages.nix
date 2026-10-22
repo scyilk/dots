@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, system, bedrock-on-linux, ... }:
 {
   home.packages = with pkgs; [
     tor-browser
@@ -64,6 +64,8 @@
     proton-vpn
     kdePackages.kdeconnect-kde
     snapshot
+
+    bedrock-on-linux.packages.${system}.default
   ];
 
   home.file = {
