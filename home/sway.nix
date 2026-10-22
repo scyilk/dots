@@ -18,9 +18,9 @@
         "*" = {
           xkb_layout = "us";
         };
-        "Glorious Model O" = {
+        "9610:54:Glorious_Model_O" = {
           accel_profile = "flat"; # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
-          pointer_accel = "0.75";
+          pointer_accel = "0";
         };
       };
 
