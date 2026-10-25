@@ -1,4 +1,4 @@
-{ pkgs, system, bedrock-on-linux, ... }:
+{ pkgs, system, bedrock-on-linux, matcha, ... }:
 {
   home.packages = with pkgs; [
     tor-browser
@@ -6,7 +6,15 @@
     vesktop
     telegram-desktop
     nheko
-    matcha
+    (matcha.packages.${system}.default.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+      checkPhase = ''
+        runHook preCheck
+        export HOME=$(mktemp -d)
+        go test $(go list ./... | grep -v '/tests/integration')
+        runHook postCheck
+      '';
+    }))
 
     mpv
     obs-studio

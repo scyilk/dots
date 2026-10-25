@@ -14,9 +14,14 @@
     bedrock-on-linux = {
       url = "github:Wyze3306/BedrockOnLinux";
     };
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    matcha = {
+      url = "github:floatpane/matcha/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, bedrock-on-linux, ... }:
+  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, ... }:
     let
       system = "x86_64-linux";
       username = "scyilk";
@@ -32,7 +37,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux; };
+            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha; };
             home-manager.users.${username} = import ./home;
           }
         ];
