@@ -32,6 +32,12 @@ in
       merge.conflictStyle = "zdiff3";
     };
   };
+  programs.gh = {
+    enable = true;
+    settings = {
+      git_protocol = "ssh";
+    };
+  };
   programs.keepassxc.enable = true;
 
   programs.direnv = {
