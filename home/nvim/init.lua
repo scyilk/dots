@@ -10,3 +10,4 @@ vim.o.termguicolors = true
 vim.g.mapleader = " "
 
 require("plugins.plugins")
+require("lsp.rust")
