@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   wayland.systemd.target = "sway-session.target";
 
@@ -14,7 +14,9 @@
       menu = "fuzzel";
       bars = [ ];
 
-      keybindings."Mod4+Shift+e" = "exec ${pkgs.wlogout}/bin/wlogout";
+      keybindings = lib.mkOptionDefault {
+        "Mod4+Shift+e" = "exec ${pkgs.wlogout}/bin/wlogout";
+      };
 
       input = {
         "*" = {
