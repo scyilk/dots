@@ -1,4 +1,4 @@
-{ pkgs, system, bedrock-on-linux, matcha, ... }:
+{ pkgs, system, bedrock-on-linux, matcha, llm-agents, ... }:
 {
   home.packages = with pkgs; [
     tor-browser
@@ -32,7 +32,9 @@
     vscode-fhs
     vscodium
     zed-editor
-    opencode
+    llm-agents.packages.${system}.opencode2
+    llm-agents.packages.${system}.omp
+    llm-agents.packages.${system}.bb-app
     jetbrains.idea
     android-studio
     kdePackages.kate

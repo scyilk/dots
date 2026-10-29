@@ -14,6 +14,8 @@
       menu = "fuzzel";
       bars = [ ];
 
+      keybindings."Mod4+Shift+e" = "exec ${pkgs.wlogout}/bin/wlogout";
+
       input = {
         "*" = {
           xkb_layout = "us";
@@ -210,16 +212,15 @@
   };
 
   programs.fuzzel.enable = true;
-  programs.swaylock.enable = true;
 
   services.swayidle = {
     enable = true;
     events = [
-      { event = "before-sleep"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
-      { event = "lock"; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+      { event = "before-sleep"; command = "${pkgs.hyprlock}/bin/hyprlock"; }
+      { event = "lock"; command = "${pkgs.hyprlock}/bin/hyprlock"; }
     ];
     timeouts = [
-      { timeout = 300; command = "${pkgs.swaylock}/bin/swaylock -f"; }
+      { timeout = 300; command = "${pkgs.hyprlock}/bin/hyprlock"; }
       { timeout = 600; command = "${pkgs.systemd}/bin/systemctl suspend"; }
     ];
   };

@@ -4,6 +4,8 @@
     ./packages.nix
     ./shell.nix
     ./sway.nix
+    ./hyprlock.nix
+    ./wlogout.nix
     ./librewolf.nix
     ./tor.nix
     ./nvim.nix

@@ -3,10 +3,13 @@
 
   nixConfig = {
     extra-experimental-features = [ "nix-command" "flakes" ];
+    extra-substituters = [ "https://cache.numtide.com" ];
+    extra-trusted-public-keys = [ "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=" ];
   };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    llm-agents.url = "github:numtide/llm-agents.nix";
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,7 +24,7 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, ... }:
+  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, llm-agents, ... }:
     let
       system = "x86_64-linux";
       username = "scyilk";
@@ -37,7 +40,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha; };
+            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha llm-agents; };
             home-manager.users.${username} = import ./home;
           }
         ];
