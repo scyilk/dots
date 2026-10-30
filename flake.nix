@@ -18,13 +18,17 @@
       url = "github:Wyze3306/BedrockOnLinux";
     };
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-26.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     matcha = {
       url = "github:floatpane/matcha/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
   };
 
-  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, llm-agents, ... }:
+  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, llm-agents, nixvim, ... }:
     let
       system = "x86_64-linux";
       username = "scyilk";
@@ -40,7 +44,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha llm-agents; };
+            home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha llm-agents nixvim; };
             home-manager.users.${username} = import ./home;
           }
         ];

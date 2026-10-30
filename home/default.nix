@@ -1,4 +1,4 @@
-{ username, pkgs, ... }:
+{ username, pkgs, nixvim, ... }:
 {
   imports = [
     ./packages.nix
@@ -10,6 +10,7 @@
     ./tor.nix
     ./nvim.nix
     ./alacritty.nix
+    nixvim.homeModules.nixvim
   ];
 
   home.username = username;

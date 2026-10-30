@@ -3,8 +3,6 @@ let
   delta = "${pkgs.delta}/bin/delta";
 in
 {
-  programs.neovim.enable = true;
-
   programs.bash = {
     enable = true;
     shellAliases = {
