@@ -1,4 +1,9 @@
 { pkgs, lib, ... }:
+let
+  # logind's Lock signal can arrive while an idle lock is already up; don't
+  # stack a second hyprlock on top of it.
+  lockScreen = "${pkgs.procps}/bin/pgrep -x hyprlock >/dev/null || ${lib.getExe pkgs.hyprlock}";
+in
 {
   wayland.systemd.target = "sway-session.target";
 
@@ -59,6 +64,7 @@
           format = "{name}";
           disable-auto-back-and-forth = true;
           tooltip = false;
+          disable-scroll = true;
         };
 
         network = {
@@ -215,15 +221,34 @@
 
   programs.fuzzel.enable = true;
 
-  services.swayidle = {
+  services.hypridle = {
     enable = true;
-    events = [
-      { event = "before-sleep"; command = "${pkgs.hyprlock}/bin/hyprlock"; }
-      { event = "lock"; command = "${pkgs.hyprlock}/bin/hyprlock"; }
-    ];
-    timeouts = [
-      { timeout = 300; command = "${pkgs.hyprlock}/bin/hyprlock"; }
-      { timeout = 600; command = "${pkgs.systemd}/bin/systemctl suspend"; }
-    ];
+
+    settings = {
+      general = {
+        # All lock requests go through logind: the idle timeout, before-sleep
+        # and wlogout call `loginctl lock-session`, and logind's Lock signal
+        # runs this command. The guard keeps a second hyprlock from stacking
+        # on an instance that is already up.
+        lock_cmd = lockScreen;
+        before_sleep_cmd = "${pkgs.systemd}/bin/loginctl lock-session";
+        after_sleep_cmd = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
+
+        # Hold a logind delay inhibitor so before_sleep_cmd runs before the
+        # system suspends. Sway has no hyprland-lock-notify-v1, so hypridle
+        # cannot wait for the lock itself (modes 2 and 3 do not work here).
+        inhibit_sleep = 1;
+
+        # Honour D-Bus (org.freedesktop.ScreenSaver) and systemd-inhibit idle
+        # inhibitors so e.g. video playback blocks idle actions.
+        ignore_dbus_inhibit = false;
+        ignore_systemd_inhibit = false;
+      };
+
+      listener = [
+        { timeout = 300; on-timeout = "${pkgs.systemd}/bin/loginctl lock-session"; }
+        { timeout = 600; on-timeout = "${pkgs.systemd}/bin/systemctl suspend"; }
+      ];
+    };
   };
 }
