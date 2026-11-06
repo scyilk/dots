@@ -26,9 +26,10 @@
       url = "github:floatpane/matcha/master";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/v0.8.0";
   };
 
-  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, llm-agents, nixvim, ... }:
+  outputs = { nixpkgs, home-manager, bedrock-on-linux, matcha, llm-agents, nixvim, nix-flatpak, ... }:
     let
       system = "x86_64-linux";
       username = "scyilk";
@@ -45,6 +46,7 @@
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit system username hostname bedrock-on-linux matcha llm-agents nixvim; };
+            home-manager.sharedModules = [ nix-flatpak.homeManagerModules.nix-flatpak ];
             home-manager.users.${username} = import ./home;
           }
         ];

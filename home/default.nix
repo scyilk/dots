@@ -2,6 +2,7 @@
 {
   imports = [
     ./packages.nix
+    ./flatpaks.nix
     ./shell.nix
     ./sway.nix
     ./hyprlock.nix
