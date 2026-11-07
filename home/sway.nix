@@ -1,5 +1,8 @@
 { pkgs, lib, ... }:
 let
+  theme = import ../theme.nix { inherit pkgs; };
+  colors = theme.colors;
+
   # logind's Lock signal can arrive while an idle lock is already up; don't
   # stack a second hyprlock on top of it.
   lockScreen = "${pkgs.procps}/bin/pgrep -x hyprlock >/dev/null || ${lib.getExe pkgs.hyprlock}";
@@ -219,7 +222,40 @@ in
     Install.WantedBy = [ "sway-session.target" ];
   };
 
-  programs.fuzzel.enable = true;
+  programs.fuzzel = {
+    enable = true;
+
+    settings = {
+      main = {
+        font = "DejaVu Sans Mono:size=14";
+        terminal = "alacritty";
+        width = 40;
+        lines = 10;
+        horizontal-pad = 20;
+        vertical-pad = 20;
+        inner-pad = 10;
+      };
+
+      colors = {
+        background = "${colors.background}ff";
+        text = "${colors.text}ff";
+        prompt = "${colors.green}ff";
+        placeholder = "${colors.white}ff";
+        input = "${colors.text}ff";
+        match = "${colors.green}ff";
+        selection = "${colors.black}ff";
+        selection-text = "${colors.text}ff";
+        selection-match = "${colors.greenBright}ff";
+        border = "${colors.green}ff";
+        counter = "${colors.white}ff";
+      };
+
+      border = {
+        width = 2;
+        radius = 0;
+      };
+    };
+  };
 
   services.hypridle = {
     enable = true;
