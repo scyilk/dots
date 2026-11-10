@@ -39,6 +39,7 @@ in
     losslesscut-bin
     ffmpeg-full
     yt-dlp
+    deno # JS runtime for yt-dlp's YouTube nsig/ejs challenge solving
     moonlight-qt
     sunshine
     gpu-screen-recorder
