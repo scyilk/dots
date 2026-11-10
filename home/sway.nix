@@ -18,7 +18,7 @@ in
 
     config = {
       modifier = "Mod4";
-      terminal = "alacritty";
+      terminal = "kitty";
       menu = "fuzzel";
       bars = [ ];
 
@@ -228,7 +228,7 @@ in
     settings = {
       main = {
         font = "DejaVu Sans Mono:size=14";
-        terminal = "alacritty";
+        terminal = "kitty";
         width = 40;
         lines = 10;
         horizontal-pad = 20;

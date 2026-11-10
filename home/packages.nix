@@ -1,4 +1,19 @@
 { pkgs, system, bedrock-on-linux, matcha, llm-agents, ... }:
+let
+  # All Yazi optional dependencies except zoxide.
+  yaziOptionalDeps = with pkgs; [
+    jq
+    poppler-utils
+    _7zz
+    ffmpeg-headless
+    fd
+    ripgrep
+    fzf
+    imagemagick
+    chafa
+    resvg
+  ];
+in
 {
   home.packages = with pkgs; [
     tor-browser
@@ -29,7 +44,14 @@
     gpu-screen-recorder
     pinta
 
-    vscode-fhs
+    # Upstream nixpkgs 1.144.0 packaging still looks for the old ripped
+    # ripgrep path; point it at the new bundled path.
+    (vscode.overrideAttrs (old: {
+      postPatch = builtins.replaceStrings
+        [ "resources/app/node_modules/@vscode/ripgrep/bin/rg" ]
+        [ "resources/app/node_modules.asar.unpacked/@vscode/ripgrep-universal/bin/linux-x64/rg" ]
+        old.postPatch;
+    })).fhs
     vscodium
     zed-editor
     llm-agents.packages.${system}.opencode2
@@ -45,6 +67,7 @@
     arduino-ide
 
     alacritty
+    (yazi.override { optionalDeps = yaziOptionalDeps; })
     ripgrep
     aria2
     fd

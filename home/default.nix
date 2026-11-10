@@ -11,6 +11,7 @@
     ./tor.nix
     ./nvim.nix
     ./alacritty.nix
+    ./kitty.nix
     nixvim.homeModules.nixvim
   ];
 
