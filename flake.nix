@@ -34,6 +34,35 @@
       system = "x86_64-linux";
       username = "scyilk";
       hostname = "dell-g3-3500";
+
+      lib = nixpkgs.lib;
+      shellPkgs = nixpkgs.legacyPackages.${system};
+
+      # CLI-only home-manager profile: the shell setup from ./home without any
+      # desktop packages, used by the `shell` devShell below.
+      shellProfile = home-manager.lib.homeManagerConfiguration {
+        pkgs = shellPkgs;
+        extraSpecialArgs = { inherit username nixvim; };
+        modules = [ ./shell ];
+      };
+      shellHome = shellProfile.config.home;
+
+      # Only tool configs belong in a dev shell; systemd units and
+      # environment.d entries are for an activated graphical session.
+      shellConfigs = lib.filterAttrs
+        (name: _: !(lib.hasPrefix "systemd/" name) && !(lib.hasPrefix "environment.d/" name))
+        shellProfile.config.xdg.configFile;
+
+      # Session variables home-manager would export at login. Drop the ones
+      # that bake in this flake's build-time home directory or the desktop's
+      # glibc locale: on a remote machine those paths don't exist.
+      shellEnv = lib.filterAttrs
+        (name: _:
+          !(lib.hasPrefix "XDG_" name)
+          && !(lib.hasPrefix "LOCALE_ARCHIVE" name)
+          && name != "STARSHIP_CONFIG"
+          && name != "TMUX_TMPDIR")
+        shellHome.sessionVariables;
     in {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit system username hostname; };
@@ -51,5 +80,45 @@
           }
         ];
       };
+
+      # `nix develop github:scyilk/dots#shell` on any machine with Nix: the
+      # user's shell setup and neovim, no X11/Wayland packages.
+      devShells.${system}.shell = shellPkgs.mkShell (
+        shellEnv
+        // {
+          name = "dots-shell";
+
+          packages = [ shellHome.path ];
+
+          shellHook = ''
+            # `nix develop` never runs home-manager activation, so materialise
+            # the generated tool configs (git, gh, tmux, direnv, nvim) once in
+            # the interactive shell. Existing files are left untouched, so a
+            # machine keeps its own setup.
+            dotsLink() {
+              local dest
+              case "$1" in
+                .config/*) dest="''${XDG_CONFIG_HOME:-$HOME/.config}/''${1#.config/}" ;;
+                *) dest="$HOME/$1" ;;
+              esac
+              if [ -e "$dest" ] || [ -L "$dest" ]; then
+                return 0
+              fi
+              mkdir -p "$(dirname "$dest")"
+              cp -R "$2" "$dest"
+            }
+            ${lib.concatStrings (
+              lib.mapAttrsToList
+                (_: entry: "dotsLink ${lib.escapeShellArg entry.target} ${lib.escapeShellArg "${entry.source}"}\n")
+                shellConfigs
+            )}
+            # Aliases, completion, starship prompt, fzf keybindings and the
+            # direnv hook all live in the generated bashrc.
+            if [ -n "''${BASH_VERSION:-}" ]; then
+              . ${shellHome.file.".bashrc".source}
+            fi
+          '';
+        }
+      );
     };
 }
