@@ -15,6 +15,8 @@
     dataDir = "/home/${username}/.local/share/syncthing";
   };
 
+  services.tailscale.enable = true;
+
   services.fwupd.enable = true;
   services.thermald.enable = true;
   services.fstrim.enable = true;
