@@ -208,6 +208,24 @@ in
     settings.program_options.menu = "flat";
   };
 
+  # `security.polkit.enable` only starts polkitd; without an authentication
+  # agent every interactive prompt (udisks2 mounts, virt-manager) fails. The
+  # agent is a Wayland window, so it belongs to the sway session. The package
+  # installs nothing into bin, hence the libexec path.
+  systemd.user.services.hyprpolkitagent = {
+    Unit = {
+      Description = "hyprpolkitagent polkit authentication agent";
+      PartOf = [ "sway-session.target" ];
+      After = [ "sway-session.target" ];
+      ConditionEnvironment = "WAYLAND_DISPLAY";
+    };
+    Service = {
+      ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "sway-session.target" ];
+  };
+
   systemd.user.services.mako = {
     Unit = {
       Description = "mako notification daemon";
