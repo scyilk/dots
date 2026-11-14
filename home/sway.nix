@@ -61,13 +61,24 @@ in
         spacing = 0;
 
         modules-left = [ "sway/workspaces" ];
-        modules-right = [ "network" "battery" "memory" "clock" "tray" ];
+        modules-right = [ "pulseaudio" "network" "battery" "memory" "clock" "tray" ];
 
         "sway/workspaces" = {
           format = "{name}";
           disable-auto-back-and-forth = true;
           tooltip = false;
           disable-scroll = true;
+        };
+
+        # PipeWire sink, driven through wpctl so scroll and click work even
+        # though the bar itself only listens over the pulse-compatible socket.
+        pulseaudio = {
+          format = "VOL {volume}% | ";
+          format-muted = "<span foreground=\"#ff0000\">VOL mute</span> | ";
+          on-click = "${pkgs.wireplumber}/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+          on-scroll-up = "${pkgs.wireplumber}/bin/wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+";
+          on-scroll-down = "${pkgs.wireplumber}/bin/wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-";
+          tooltip = false;
         };
 
         network = {
