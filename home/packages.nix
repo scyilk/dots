@@ -100,6 +100,8 @@ in
     snapshot
 
     bedrock-on-linux.packages.${system}.default
+
+    devenv
   ];
 
   home.file = {
