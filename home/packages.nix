@@ -44,6 +44,7 @@ in
     sunshine
     gpu-screen-recorder
     pinta
+    apostrophe
 
     # Upstream nixpkgs 1.144.0 packaging still looks for the old ripped
     # ripgrep path; point it at the new bundled path.
